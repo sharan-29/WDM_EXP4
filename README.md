@@ -63,6 +63,72 @@ plt.show()
 
 <img width="878" height="686" alt="image" src="https://github.com/user-attachments/assets/a1d099db-acca-449a-8891-6fc80728d9b4" />
 
+### Program 2:
+```python
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+
+# Clean column names (Excel safety)
+df.columns = df.columns.str.strip()
+
+# Remove existing Cluster column if present
+if 'Cluster' in df.columns:
+    df = df.drop(columns=['Cluster'])
+
+# Select features for clustering
+X = df[['Age', 'Income']]
+
+# Standardize the data
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Apply K-Means clustering
+kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+clusters = kmeans.fit_predict(X_scaled)
+
+# Convert cluster labels to DataFrame
+cluster_df = pd.DataFrame(clusters, columns=['Cluster'])
+
+# Concatenate cluster labels with original dataset
+df = pd.concat([df, cluster_df], axis=1)
+
+# -----------------------------------
+# Arrange clusters by average Income
+# -----------------------------------
+cluster_order = (
+    df.groupby('Cluster')['Income']
+    .mean()
+    .sort_values()
+    .index
+)
+
+cluster_mapping = {old: new for new, old in enumerate(cluster_order)}
+df['Cluster'] = df['Cluster'].map(cluster_mapping)
+
+# -----------------------------------
+# Display clustering result neatly
+# -----------------------------------
+print("\nK-Means Clustering Result (Ordered by Income)")
+print(df[['Age', 'Income', 'Cluster']].sort_values('Cluster').to_string(index=False))
+
+# -----------------------------------
+# Visualize clusters
+# -----------------------------------
+plt.figure(figsize=(8, 6))
+plt.scatter(df['Age'], df['Income'], c=df['Cluster'])
+plt.xlabel("Age")
+plt.ylabel("Income")
+plt.title("K-Means Clustering using Age and Income (Low → High)")
+plt.show()
+```
+
+### Output:
+
+<img width="507" height="709" alt="image" src="https://github.com/user-attachments/assets/f107f451-d0b4-4d35-a9d6-19a322b3dfde" />
+
+
+<img width="866" height="688" alt="image" src="https://github.com/user-attachments/assets/38a04848-8c66-4841-b502-e8772550f858" />
+
 
 ### Result:
 

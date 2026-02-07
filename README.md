@@ -25,7 +25,8 @@ age_groups = {
 }
 
 for group, condition in age_groups.items():  
-    visitors_in_group = visitor_df[condition] 
+    visitors_in_group = visitor_df[condition]
+    printf("count= {len(visitors_in_group)}")
     print(f"Visitors in {group} age group:")
     print(visitors_in_group)
 
@@ -34,7 +35,8 @@ for group, condition in age_groups.items():
 ```
 ### Output:
 
-<img width="485" height="804" alt="image" src="https://github.com/user-attachments/assets/5ded4317-b19a-45d2-bd46-110a14f9c44f" />
+<img width="497" height="813" alt="image" src="https://github.com/user-attachments/assets/b647dedc-07d7-4be0-ae31-1dee22d7211c" />
+
 
 
 ### Visualization:
